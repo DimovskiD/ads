@@ -1,0 +1,53 @@
+<div class = "row" style="margin-top: 40px; ">
+  <div class="col-sm-6 w3-agile-crd">
+    <div class="card">
+      <div class = "card-header">
+        <h2 class = "text-center">Total Count</h2>
+      </div>
+      <div class="card-body card-padding" style="height: 150px">
+        <h2 class = "text-center" style="vertical-align: center">{{ads.length}}</h2>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-sm-6 w3-agile-crd" >
+    <div class="card">
+      <div class = "card-header">
+        <h2 class = "text-center">Upload New</h2>
+      </div>
+      <div class="card-body card-padding" style="height: 150px">
+        <a href="#">
+          <img src="../assets/upload.png" class = "img img-responsive text-center center-block" style="height: 90px; vertical-align: center"/>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="card my-5">
+  <div class = "card-header">
+    <h2>Advertisements</h2>
+  </div>
+  <div class="card-body">
+
+    <table class="table table-bordered table-striped ">
+      <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Name</th>
+        <th scope="col">Type</th>
+        <th scope="col">Details</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let ad of ads">
+        <td>{{ ad.id }}</td>
+        <td>{{ ad.name }}</td>
+        <td>{{ ad.type }}</td>
+        <td><a href="/ads/  {{ad.id}}">View</a></td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
