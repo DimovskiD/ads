@@ -11,9 +11,12 @@ import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
 import com.finki.ads.config.StorageProperties;
+import com.finki.ads.model.exceptions.FileTooLargeException;
+import com.finki.ads.model.exceptions.InvalidAdFormatException;
 import com.finki.ads.model.exceptions.StorageException;
 import com.finki.ads.model.exceptions.StorageFileNotFoundException;
 import com.finki.ads.service.StorageService;
+import com.finki.ads.util.VideoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -39,12 +42,17 @@ public class StorageServiceImpl implements StorageService {
             if (file.isEmpty()) {
                 throw new StorageException("Failed to store empty file " + filename);
             }
+
+            if (file.getSize()>1e+7)
+                throw new FileTooLargeException("File size exceeds limits.");
+
             if (filename.contains("..")) {
                 // This is a security check
                 throw new StorageException(
                         "Cannot store file with relative path outside current directory "
                                 + filename);
             }
+            if (!VideoUtil.isVideoFile(file)) throw new InvalidAdFormatException("File format not supported");
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, this.rootLocation.resolve(filename),
                         StandardCopyOption.REPLACE_EXISTING);

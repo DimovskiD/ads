@@ -16,7 +16,7 @@
         <h2 class = "text-center">Upload New</h2>
       </div>
       <div class="card-body card-padding" style="height: 150px">
-        <a href="#">
+        <a routerLink="/newAd">
           <img src="../assets/upload.png" class = "img img-responsive text-center center-block" style="height: 90px; vertical-align: center"/>
         </a>
       </div>
@@ -37,6 +37,7 @@
         <th scope="col">Name</th>
         <th scope="col">Type</th>
         <th scope="col">Details</th>
+        <th scope="col">Delete</th>
       </tr>
       </thead>
       <tbody>
@@ -44,7 +45,8 @@
         <td>{{ ad.id }}</td>
         <td>{{ ad.name }}</td>
         <td>{{ ad.type }}</td>
-        <td><a href="/ads/  {{ad.id}}">View</a></td>
+        <td><a href="/ads/{{ad.id}}">View</a></td>
+        <td (click)="delete(ad)"><a style="color: #008DE7; cursor: pointer">Delete</a> </td>
       </tr>
       </tbody>
     </table>

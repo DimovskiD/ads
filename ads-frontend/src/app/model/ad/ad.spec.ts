@@ -1,4 +1,4 @@
-import { Ad } from './ad';
+import { Ad } from '../../component/ad';
 
 describe('Ad', () => {
   it('should create an instance', () => {

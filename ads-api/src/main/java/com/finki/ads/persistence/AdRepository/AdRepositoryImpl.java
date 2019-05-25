@@ -22,6 +22,7 @@ public interface AdRepositoryImpl extends JpaRepository<Ad,Long>, AdRepository {
     }
 
     List<Ad> findAdsByImportance(int importance);
+    List<Ad> findAdByActive(boolean active);
 
     @Modifying(clearAutomatically = true)
     @Transactional
@@ -33,5 +34,7 @@ public interface AdRepositoryImpl extends JpaRepository<Ad,Long>, AdRepository {
                  @Param("fileName") String fileName,
                  @Param("category") short category,
                  @Param("importance") int importance);
+
+    int deleteAdById(int id);
 
 }

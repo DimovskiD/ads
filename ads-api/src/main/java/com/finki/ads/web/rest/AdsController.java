@@ -2,9 +2,8 @@ package com.finki.ads.web.rest;
 
 import com.finki.ads.model.Ad;
 import com.finki.ads.model.AdBuilder;
-import com.finki.ads.model.Student;
-import com.finki.ads.model.StudentRequest;
-import com.finki.ads.persistence.AdRepository.AdRepository;
+import com.finki.ads.model.exceptions.AdNotFoundException;
+import com.finki.ads.model.exceptions.NegativeImportanceException;
 import com.finki.ads.service.AdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import javax.ws.rs.core.MediaType;
-import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -28,11 +26,11 @@ public class AdsController {
         this.adService = adService;
     }
 
+
     @GetMapping
     public List<Ad> getAds() {
         return adService.getAllAds();
     }
-
 
     @GetMapping("/{id}")
     public Ad getAdById(@PathVariable("id") int id) {
@@ -63,27 +61,16 @@ public class AdsController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable int id) {
+    public int delete(@PathVariable int id) {
         Ad a = adService.getAdById(id);
-        if (a==null)
-            new ResponseEntity("\"This ad does not exist", HttpStatus.NOT_FOUND);
-        else adService.delete(a);
+        return adService.delete(a);
     }
 
     @RequestMapping(method = RequestMethod.PATCH, value = "/{id}")
-    public ResponseEntity patchStudent(@PathVariable String id, @RequestBody Ad ad) {
-        int iId;
-        try {
-            iId = Integer.parseInt(id);
-        } catch (NumberFormatException a) {
-            return new ResponseEntity("\"Invalid id\"", HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity patch(@PathVariable int id, @RequestBody Ad ad) {
 
-
-        if (adService.getAdById(iId)==null)
-            return new ResponseEntity("\"This ad does not exist\"", HttpStatus.NOT_FOUND);
         Ad a = new AdBuilder()
-                .setId(iId)
+                .setId(id)
                 .setName(ad.getName())
                 .setActive(ad.isActive())
                 .setCategory(ad.getCategory())
@@ -92,8 +79,18 @@ public class AdsController {
                 .setImportance(ad.getImportance())
                 .setType(ad.getType())
                 .build();
-        adService.updateAd(iId,ad);
+        adService.updateAd(id,ad);
         return new ResponseEntity(a, HttpStatus.CREATED);
     }
+
+    @ExceptionHandler(AdNotFoundException.class)
+    public ResponseEntity<?> handleAdNotFound(AdNotFoundException exc) {
+        return ResponseEntity.notFound().build();
+    }
+    @ExceptionHandler(NegativeImportanceException.class)
+    public ResponseEntity<?> handleNegativeImportance(NegativeImportanceException exc) {
+        return ResponseEntity.badRequest().body(exc.getMessage());
+    }
+
 
 }

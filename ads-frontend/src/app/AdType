@@ -1,3 +1,0 @@
-enum AdType {
-  LINEAR, OVERLAY, IN_BANNER
-}

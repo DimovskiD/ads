@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import {AdService} from '../ad.service';
-import {Ad} from '../ad';
+import {AdService} from '../../service/ad/ad.service';
+import {Ad} from '../../model/ad/ad';
 
 @Component({
   selector: 'app-ad',
@@ -17,7 +17,14 @@ export class AdComponent implements OnInit {
     this.adService.findAll().subscribe(data => {
       this.ads = data;
     });
-
+  }
+  delete(ad: Ad) {
+    this.adService.delete(ad.id).subscribe(deleted => {
+      console.log(deleted);
+      if (deleted > 0) {
+        this.ads.splice(this.ads.indexOf(ad), 1);
+      }
+    });
   }
 
 }

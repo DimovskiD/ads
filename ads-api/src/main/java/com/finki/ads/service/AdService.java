@@ -14,7 +14,10 @@ public interface AdService {
 
     Ad saveAd(Ad ad);
 
-    void delete(Ad ad);
+    int delete(Ad ad);
 
     List<Ad> getAdsByImportance(int importance);
+
+    List<Ad> getActiveAds(boolean areActive);
+
 }

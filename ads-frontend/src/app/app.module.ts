@@ -3,13 +3,13 @@ import { NgModule } from '@angular/core';
 import {HttpClientModule} from '@angular/common/http';
 
 import { AppComponent } from './app.component';
-import { AdComponent } from './ad/ad.component';
+import { AdComponent } from './component/ad/ad.component';
 import {RouterModule, Routes} from '@angular/router';
-import { AdFormComponent } from './ad-form/ad-form.component';
+import { AdFormComponent } from './component/ad-form/ad-form.component';
 import {FormsModule} from '@angular/forms';
 
 const routes: Routes = [
-  { path: 'ads', component: AdComponent },
+  { path: '', component: AdComponent },
   { path: 'newAd', component: AdFormComponent }
 
   // { path: 'adduser', component: UserFormComponent }
