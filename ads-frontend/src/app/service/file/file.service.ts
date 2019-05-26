@@ -21,4 +21,8 @@ export class FileService {
     //   return val;
     // });
   }
+
+  public async getFilePath(filename: string) {
+    return await this.http.get(this.fileUpload + '/name/' + filename, {responseType: 'text'}).toPromise();
+  }
 }

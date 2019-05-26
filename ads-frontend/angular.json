@@ -26,7 +26,9 @@
               "src/styles.css"
             ],
             "scripts": [
-              "./node_modules/video.js/dist/video.min.js"
+              "./node_modules/video.js/dist/video.min.js",
+              "./node_modules/videojs-contrib-ads/dist/videojs.ads.min.js"
+
             ],
             "es5BrowserSupport": true
           },

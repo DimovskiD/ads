@@ -16,7 +16,9 @@ import {Ad} from '../../model/ad/ad';
   public findAll(): Observable<Ad[]> {
     return this.http.get<Ad[]>(this.adUrl);
   }
-
+  public findById(id: number): Observable<Ad> {
+    return this.http.get<Ad>(this.adUrl + '/' + id);
+  }
   public save(ad: Ad) {
     return this.http.post<Ad>(this.adUrl, ad);
   }

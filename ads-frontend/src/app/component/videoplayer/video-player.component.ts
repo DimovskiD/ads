@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-
-// Declara a lib do videojs como externa ao angular
+import {FileService} from '../../service/file/file.service';
+import {log} from 'util';
+import {AdService} from '../../service/ad/ad.service';
+import {Ad} from '../../model/ad/ad';
 declare let videojs: any;
 
 @Component({
@@ -11,13 +13,20 @@ declare let videojs: any;
 })
 export class VideoPlayerComponent implements OnInit, AfterViewInit  {
 
-
+  adService: AdService;
   title = 'Video player';
   vidObj: any;
   poster = '//vjs.zencdn.net/v/oceans.png';
   video = '//vjs.zencdn.net/v/oceans.mp4';
+  ad: Ad;
   @ViewChild('myvid') vid: ElementRef;
-  constructor() { }
+  constructor(adService: AdService) {
+    this.adService = adService;
+    adService.findById(38).subscribe(data => {
+      this.ad = data;
+      console.log(this.ad.fileName);
+    });
+  }
 
   ngOnInit() {
   }
@@ -30,8 +39,31 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit  {
       techOrder: ['html5']
     };
 
-    this.vidObj = new videojs(this.vid.nativeElement, options, function onPlayerReady() {
+    this.vidObj = new videojs(this.vid.nativeElement, options, () => {
       videojs.log('Your player is ready!');
+      const player = this.vidObj;
+      player.ads();
+
+      player.on('contentupdate', () => {
+        // fetch ad inventory asynchronously, then ...
+        player.trigger('adsready');
+        player.log('ad ready!');
+
+      });
+
+      player.on('readyforpreroll', () => {
+        player.ads.startLinearAdMode();
+        // play your linear ad content
+        player.log('ad preroll ready!');
+        player.src('http://localhost:8080/files/' + this.ad.fileName);
+
+        // when all your linear ads have finished… do not confuse this with `ended`
+        player.one('adended', () => {
+          player.ads.endLinearAdMode();
+        });
+      });
+      player.trigger('adsready');
+
     });
   }
 
