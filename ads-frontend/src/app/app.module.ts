@@ -7,10 +7,12 @@ import { AdComponent } from './component/ad/ad.component';
 import {RouterModule, Routes} from '@angular/router';
 import { AdFormComponent } from './component/ad-form/ad-form.component';
 import {FormsModule} from '@angular/forms';
+import { VideoPlayerComponent } from './component/videoplayer/video-player.component';
 
 const routes: Routes = [
   { path: '', component: AdComponent },
-  { path: 'newAd', component: AdFormComponent }
+  { path: 'newAd', component: AdFormComponent },
+  { path: 'videoPlayer', component: VideoPlayerComponent}
 
   // { path: 'adduser', component: UserFormComponent }
 ];
@@ -19,7 +21,8 @@ const routes: Routes = [
   declarations: [
     AppComponent,
     AdComponent,
-    AdFormComponent
+    AdFormComponent,
+    VideoPlayerComponent
   ],
   imports: [
     BrowserModule,

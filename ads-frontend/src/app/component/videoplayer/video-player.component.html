@@ -1,0 +1,23 @@
+<head>
+  <link href="https://vjs.zencdn.net/7.5.4/video-js.css" rel="stylesheet">
+
+  <!-- If you'd like to support IE8 (for Video.js versions prior to v7) -->
+  <script src="https://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script>
+</head>
+
+  <div class="row">
+      <div class="col">
+        <div class="jumbotron">
+          <h3 class="text-center">Video Player</h3>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col text-center">
+        <video #myvid id="my-video" class="video-js vjs-big-play-centered mini-play"
+               width="640" height="360" [poster]="poster" style="margin: auto;">
+          <source [src]="video" type="video/mp4">
+        </video>
+      </div>
+    </div>
+
