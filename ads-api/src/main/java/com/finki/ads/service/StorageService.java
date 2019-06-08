@@ -11,11 +11,18 @@ public interface StorageService {
 
     void store(MultipartFile file);
 
+    void storeImageFile(MultipartFile file);
+
+    void storeVideoFile(MultipartFile file);
+
     Stream<Path> loadAll();
 
     Path load(String filename);
 
     Resource loadAsResource(String filename);
+
+    String getPathForFilename(String filename);
+
 
     void deleteAll();
 

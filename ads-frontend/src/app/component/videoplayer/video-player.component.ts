@@ -19,11 +19,17 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit  {
   poster = '//vjs.zencdn.net/v/oceans.png';
   video = '//vjs.zencdn.net/v/oceans.mp4';
   ad: Ad;
+  imgAd: Ad;
   @ViewChild('myvid') vid: ElementRef;
   constructor(adService: AdService) {
     this.adService = adService;
-    adService.findById(38).subscribe(data => {
+    adService.findById(41).subscribe(data => {
       this.ad = data;
+      console.log(this.ad.fileName);
+    });
+
+    adService.findById(42).subscribe(data => {
+      this.imgAd = data;
       console.log(this.ad.fileName);
     });
   }
@@ -38,7 +44,6 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit  {
       preload: 'auto',
       techOrder: ['html5']
     };
-
     this.vidObj = new videojs(this.vid.nativeElement, options, () => {
       videojs.log('Your player is ready!');
       const player = this.vidObj;
@@ -56,7 +61,16 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit  {
         // play your linear ad content
         player.log('ad preroll ready!');
         player.src('http://localhost:8080/files/' + this.ad.fileName);
+        player.overlay({
+          content: 'Default overlay content',
+          debug: true,
+          overlays: [{
+            content: '<img class = "img img-responsive" src ="' + 'http://localhost:8080/files/' + this.imgAd.fileName + '">',
+            start: 0,
+            end: 10,
+            align: 'bottom'
 
+          }]});
         // when all your linear ads have finished… do not confuse this with `ended`
         player.one('adended', () => {
           player.ads.endLinearAdMode();

@@ -23,15 +23,27 @@ export class AdFormComponent {
   }
 
   onSubmit() {
-    this.fileService.uploadFile(this.file).then( (response) => {
+    // if (this.ad.type === 0) {
+    //   this.fileService.uploadVideoFile(this.file).then((response) => {
+    //     console.log(response);
+    //     this.fail = false;
+    //     this.adService.save(this.ad).subscribe(result => this.goToAdList());
+    //   }, (reason => {
+    //     console.log(reason);
+    //     this.fail = true;
+    //     document.getElementById('file-error').innerHTML = reason.error;
+    //   }));
+    // } else if (this.ad.type === 1) {
+      this.fileService.uploadImageFile(this.file).then((response) => {
         console.log(response);
         this.fail = false;
         this.adService.save(this.ad).subscribe(result => this.goToAdList());
-    }, (reason => {
-      console.log(reason);
-      this.fail = true;
-      document.getElementById('file-error').innerHTML = reason.error;
-    }));
+      }, (reason => {
+        console.log(reason);
+        this.fail = true;
+        document.getElementById('file-error').innerHTML = reason.error;
+      }));
+    // }
   }
 
   goToAdList() {

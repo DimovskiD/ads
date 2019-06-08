@@ -8,11 +8,16 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.Console;
 import java.net.URLConnection;
 
-public class VideoUtil {
+public class FileUtil {
 
     public static boolean isVideoFile(MultipartFile file) {
         String mimeType = file.getContentType();
         return mimeType != null && mimeType.startsWith("video");
+    }
+
+    public static boolean isImageFile(MultipartFile file) {
+        String mimeType = file.getContentType();
+        return mimeType != null && mimeType.startsWith("image");
     }
 
 }

@@ -23,12 +23,13 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.css"
+              "src/styles.css",
+              "./node_modules/videojs-overlay/dist/videojs-overlay.css"
             ],
             "scripts": [
               "./node_modules/video.js/dist/video.min.js",
-              "./node_modules/videojs-contrib-ads/dist/videojs.ads.min.js"
-
+              "./node_modules/videojs-contrib-ads/dist/videojs.ads.min.js",
+              "./node_modules/videojs-overlay/dist/videojs-overlay.min.js"
             ],
             "es5BrowserSupport": true
           },

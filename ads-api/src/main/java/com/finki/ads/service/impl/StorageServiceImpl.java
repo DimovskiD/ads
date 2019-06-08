@@ -16,7 +16,7 @@ import com.finki.ads.model.exceptions.InvalidAdFormatException;
 import com.finki.ads.model.exceptions.StorageException;
 import com.finki.ads.model.exceptions.StorageFileNotFoundException;
 import com.finki.ads.service.StorageService;
-import com.finki.ads.util.VideoUtil;
+import com.finki.ads.util.FileUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -52,7 +52,6 @@ public class StorageServiceImpl implements StorageService {
                         "Cannot store file with relative path outside current directory "
                                 + filename);
             }
-            if (!VideoUtil.isVideoFile(file)) throw new InvalidAdFormatException("File format not supported");
             try (InputStream inputStream = file.getInputStream()) {
                 Files.copy(inputStream, this.rootLocation.resolve(filename),
                         StandardCopyOption.REPLACE_EXISTING);
@@ -61,6 +60,18 @@ public class StorageServiceImpl implements StorageService {
         catch (IOException e) {
             throw new StorageException("Failed to store file " + filename, e);
         }
+    }
+
+    @Override
+    public void storeImageFile(MultipartFile file) {
+        if (!FileUtil.isImageFile(file)) throw new InvalidAdFormatException("File format not supported");
+        else store(file);
+    }
+
+    @Override
+    public void storeVideoFile(MultipartFile file) {
+        if (!FileUtil.isVideoFile(file)) throw new InvalidAdFormatException("File format not supported");
+        else store(file);
     }
 
     @Override
@@ -98,6 +109,14 @@ public class StorageServiceImpl implements StorageService {
         catch (MalformedURLException e) {
             throw new StorageFileNotFoundException("Could not read file: " + filename, e);
         }
+    }
+
+    @Override
+    public String getPathForFilename(String filename) {
+
+        Path file = load(filename);
+        return file.toString();
+
     }
 
     @Override
