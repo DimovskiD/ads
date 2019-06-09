@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {Ad} from '../../model/ad/ad';
+import {Ad, AdType} from '../../model/ad/ad';
 
 
 @Injectable({
@@ -23,8 +23,15 @@ import {Ad} from '../../model/ad/ad';
     return this.http.post<Ad>(this.adUrl, ad);
   }
 
+  public update(ad: Ad) {
+    return this.http.patch<Ad>(this.adUrl + '/' + ad.id, ad);
+  }
+
   public delete(adId: number) {
     return this.http.delete(this.adUrl + '/' + adId);
+  }
+  public getRandomAdByType(adType: AdType): Observable<Ad> {
+    return this.http.get<Ad>(this.adUrl + '/type/' + adType);
   }
 
 }

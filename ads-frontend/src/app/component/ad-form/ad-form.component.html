@@ -10,14 +10,14 @@
                class="form-control" id="name" name="name" placeholder="Ad name"
                required #name="ngModel">
       </div>
-      <div [hidden]="!name.pristine" class="alert alert-danger">Ad name is required</div>
+      <div [hidden]="ad.name != undefined && ad.name.length > 0" class="alert alert-danger">Ad name is required</div>
       <div class="form-group">
         <label for="duration">Duration</label>
         <input type="number" min="0" onkeypress="return event.charCode >= 48" [(ngModel)]="ad.duration"
                class="form-control" id="duration" name="duration" placeholder="Enter duration"
                required #duration="ngModel">
       </div>
-      <div [hidden]="!duration.pristine" class="alert alert-danger">Duration is required</div>
+      <div [hidden]="ad.duration > 0" class="alert alert-danger">Duration is required</div>
 
       <div class="form-group">
         <label for="duration">Importance</label>
@@ -25,27 +25,40 @@
                class="form-control" id="importance" name="importance" placeholder="Enter importance"
                required #importance="ngModel">
       </div>
-      <div [hidden]="!importance.pristine" class="alert alert-danger">Importance is required</div>
+      <div [hidden]="ad.importance > 0" class="alert alert-danger">Importance is required</div>
 
 
 
 
-      <div class="form-group">
+      <div class="form-group" >
         <label for="adType">Ad Type:</label>
 
-        <select class="custom-select"  [(ngModel)]="ad.type" id="adType" name="adType" required #adType="ngModel">
-          <option selected = "selected" value="0  ">Linear</option>
-          <option value="1">Overlay</option>
-          <option value="2">In Banner</option>
+        <select class="custom-select" [(ngModel)]="ad.type"  [disabled]="existingAd" id="adType" name="adType" required #adType="ngModel">
+          <option [ngValue]="adTypes[0]">Linear</option>
+          <option [ngValue]="adTypes[1]">Overlay</option>
         </select>
 
       </div>
-      <div [hidden]="!adType.pristine" class="alert alert-danger">Ad type is required</div>
+      <div [hidden]="adTypes[ad.type]>=0" class="alert alert-danger">Ad type is required</div>
+
+      <div class="form-group">
+        <label for="category">Category:</label>
+
+        <select class="custom-select"  [(ngModel)]="ad.category"  id="category" name="category" required #category="ngModel">
+          <option [ngValue]="categories[0]">Automotive</option>
+          <option [ngValue]="categories[1]">Beverages</option>
+          <option [ngValue]="categories[2]">Food</option>
+          <option [ngValue]="categories[3]">Health</option>
+
+        </select>
+
+      </div>
+      <div [hidden]="categories[ad.category] >= 0" class="alert alert-danger">Ad category is required</div>
 
       <div class="form-group">
         <!-- Default switch -->
         <div class="custom-control custom-switch">
-          <input type="checkbox" class="custom-control-input" id="customSwitch1" [(ngModel)]="ad.active" name="active">
+          <input type="checkbox" [checked]="ad.active" class="custom-control-input" id="customSwitch1" [(ngModel)]="ad.active" name="active">
           <label class="custom-control-label" for="customSwitch1">Active?</label>
         </div>
       </div>
@@ -54,11 +67,11 @@
 
 
       <div class="custom-file">
-        <input type="file"  id="file" accept="video/mp4,video/x-m4v,video/*,image/*" (change)="uploadFile($event)"  name="file" required  />
-        <label class="custom-file-label" id="fileLabel" for="file">Choose Video</label>
+        <input type="file" [disabled]="existingAd" id="file" accept="video/mp4,video/x-m4v,video/*,image/*" (change)="uploadFile($event)"  name="file" required  />
+        <label class="custom-file-label" id="fileLabel" for="file">Choose File</label>
       </div>
       </div>
-      <div [hidden]="!fail" class="alert alert-danger" id="file-error">Invalid video format.</div>
+      <div [hidden]="!fail" class="alert alert-danger" id="file-error">Invalid file format.</div>
 
       <button type="submit" [disabled]="!adForm.form.valid || ad.fileName==null" class="btn btn-info">Submit</button>
     </form>

@@ -12,10 +12,9 @@ import { VideoPlayerComponent } from './component/videoplayer/video-player.compo
 const routes: Routes = [
   { path: '', component: AdComponent },
   { path: 'newAd', component: AdFormComponent },
+  { path: 'ads/:ad', component: AdFormComponent },
   { path: 'videoPlayer', component: VideoPlayerComponent}
-
-  // { path: 'adduser', component: UserFormComponent }
-];
+  ];
 
 @NgModule({
   declarations: [

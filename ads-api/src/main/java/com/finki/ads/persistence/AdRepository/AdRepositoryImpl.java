@@ -2,12 +2,14 @@ package com.finki.ads.persistence.AdRepository;
 
 import com.finki.ads.model.Ad;
 import com.finki.ads.model.AdType;
+import com.finki.ads.model.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import javax.transaction.Transactional;
+import java.awt.print.Pageable;
 import java.util.List;
 
 public interface AdRepositoryImpl extends JpaRepository<Ad,Long>, AdRepository {
@@ -32,8 +34,11 @@ public interface AdRepositoryImpl extends JpaRepository<Ad,Long>, AdRepository {
                  @Param("active") boolean active, @Param("duration") int duration,
                  @Param("adtype") AdType type,
                  @Param("fileName") String fileName,
-                 @Param("category") short category,
+                 @Param("category") Category category,
                  @Param("importance") int importance);
+
+    @Query("select a from Ad a where a.type = :adType and a.active = true ORDER BY function('RAND')")
+    List<Ad> selectRandomAdByType(@Param("adType") AdType adType);
 
     int deleteAdById(int id);
 

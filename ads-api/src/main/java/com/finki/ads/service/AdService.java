@@ -1,6 +1,7 @@
 package com.finki.ads.service;
 
 import com.finki.ads.model.Ad;
+import com.finki.ads.model.AdType;
 
 import java.util.List;
 
@@ -19,5 +20,8 @@ public interface AdService {
     List<Ad> getAdsByImportance(int importance);
 
     List<Ad> getActiveAds(boolean areActive);
+
+    Ad selectRandomAdByType(String adType);
+
 
 }

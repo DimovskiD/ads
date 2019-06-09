@@ -1,7 +1,10 @@
-enum AdType {
-  LINEAR = 0, OVERLAY, IN_BANNER
+export enum AdType {
+  LINEAR = 0, OVERLAY
 }
 
+export enum Category {
+  AUTOMOTIVE = 0, BEVERAGES, FOOD, HEALTH
+}
 
 export class Ad {
   id: number;
@@ -10,7 +13,7 @@ export class Ad {
   active: boolean;
   type: AdType;
   fileName: string;
-  category: number;
+  category: Category;
   importance: number;
 
 }

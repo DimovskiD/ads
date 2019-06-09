@@ -2,8 +2,10 @@ package com.finki.ads.web.rest;
 
 import com.finki.ads.model.Ad;
 import com.finki.ads.model.AdBuilder;
+import com.finki.ads.model.AdType;
 import com.finki.ads.model.exceptions.AdNotFoundException;
 import com.finki.ads.model.exceptions.NegativeImportanceException;
+import com.finki.ads.model.exceptions.TypeNotFoundException;
 import com.finki.ads.service.AdService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,6 +42,11 @@ public class AdsController {
     @GetMapping("/importance/{importance}")
     public List<Ad> getAdsByImportance(@PathVariable("importance") int importance)  {
         return adService.getAdsByImportance(importance);
+    }
+
+    @GetMapping("/type/{adType}")
+    public Ad getRandomAdByType(@PathVariable("adType") String adType) {
+        return adService.selectRandomAdByType(adType);
     }
 
 
@@ -91,6 +98,11 @@ public class AdsController {
     public ResponseEntity<?> handleNegativeImportance(NegativeImportanceException exc) {
         return ResponseEntity.badRequest().body(exc.getMessage());
     }
+    @ExceptionHandler(TypeNotFoundException.class)
+    public ResponseEntity<?> handleAdNotFound(TypeNotFoundException exc) {
+        return ResponseEntity.notFound().build();
+    }
+
 
 
 }

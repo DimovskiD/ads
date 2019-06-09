@@ -16,7 +16,7 @@ public class Ad {
     private boolean active;
     private AdType type;
     private String fileName;
-    private short category;
+    private Category category;
     private int importance;
 
     public int getId() {
@@ -67,11 +67,11 @@ public class Ad {
         this.fileName = fileName;
     }
 
-    public short getCategory() {
+    public Category getCategory() {
         return category;
     }
 
-    public void setCategory(short category) {
+    public void setCategory(Category category) {
         this.category = category;
     }
 

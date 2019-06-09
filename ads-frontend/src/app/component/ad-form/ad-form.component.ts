@@ -1,9 +1,10 @@
-
-import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { AdService } from '../../service/ad/ad.service';
-import { Ad } from '../../model/ad/ad';
+import {Component, OnInit} from '@angular/core';
+import {NgSelectOption} from '@angular/forms';
+import {ActivatedRoute, Router} from '@angular/router';
+import {AdService} from '../../service/ad/ad.service';
+import {Ad, AdType, Category} from '../../model/ad/ad';
 import {FileService} from '../../service/file/file.service';
+import {log} from 'util';
 
 
 @Component({
@@ -11,39 +12,63 @@ import {FileService} from '../../service/file/file.service';
   templateUrl: './ad-form.component.html',
   styleUrls: ['./ad-form.component.css']
 })
-export class AdFormComponent {
+export class AdFormComponent implements OnInit {
 
   ad: Ad;
   name: string;
   fail: boolean;
   file: File;
+  categories = Category;
+  adTypes = AdType;
+  existingAd = false;
   constructor(private route: ActivatedRoute, private router: Router, private adService: AdService, private fileService: FileService) {
     this.ad = new Ad();
     this.fail = false;
   }
+  ngOnInit() {
+    if (this.route.snapshot.paramMap.has('ad')) {
+      const adId = this.route.snapshot.paramMap.get('ad');
+      this.adService.findById(+adId).subscribe(data => {
+        this.ad = data;
+        this.existingAd = true;
+        console.log(this.ad.fileName);
+        document.getElementById('fileLabel').innerHTML = this.ad.fileName;
+
+      });
+    }
+  }
 
   onSubmit() {
-    // if (this.ad.type === 0) {
-    //   this.fileService.uploadVideoFile(this.file).then((response) => {
-    //     console.log(response);
-    //     this.fail = false;
-    //     this.adService.save(this.ad).subscribe(result => this.goToAdList());
-    //   }, (reason => {
-    //     console.log(reason);
-    //     this.fail = true;
-    //     document.getElementById('file-error').innerHTML = reason.error;
-    //   }));
-    // } else if (this.ad.type === 1) {
-      this.fileService.uploadImageFile(this.file).then((response) => {
-        console.log(response);
-        this.fail = false;
-        this.adService.save(this.ad).subscribe(result => this.goToAdList());
-      }, (reason => {
-        console.log(reason);
-        this.fail = true;
-        document.getElementById('file-error').innerHTML = reason.error;
-      }));
-    // }
+    log(this.ad.type);
+    log(this.adTypes[AdType.LINEAR]);
+    log(this.adTypes[this.ad.type]);
+    if (this.existingAd) {
+      this.adService.update(this.ad).subscribe(result => this.goToAdList());
+    } else {
+      // tslint:disable-next-line:triple-equals
+      if (this.ad.type.toString() == this.adTypes[AdType.LINEAR]) {
+        this.fileService.uploadVideoFile(this.file).then((response) => {
+          console.log(response);
+          this.fail = false;
+          this.adService.save(this.ad).subscribe(result => this.goToAdList());
+        }, (reason => {
+          console.log(reason);
+          this.fail = true;
+          document.getElementById('file-error').innerHTML = reason.error;
+        }));
+        // tslint:disable-next-line:triple-equals
+      } else if (this.ad.type.toString() == this.adTypes[AdType.OVERLAY]) {
+        this.fileService.uploadImageFile(this.file).then((response) => {
+          console.log(response);
+          this.fail = false;
+          this.adService.save(this.ad).subscribe(result => this.goToAdList());
+        }, (reason => {
+          console.log(reason);
+          this.fail = true;
+          document.getElementById('file-error').innerHTML = reason.error;
+        }));
+      }
+    }
   }
 
   goToAdList() {
@@ -64,4 +89,6 @@ export class AdFormComponent {
       }
     }
   }
+
+
 }

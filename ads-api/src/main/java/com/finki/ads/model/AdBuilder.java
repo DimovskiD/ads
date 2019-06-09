@@ -42,7 +42,7 @@ public class AdBuilder {
     }
 
 
-    public AdBuilder setCategory (short category) {
+    public AdBuilder setCategory (Category category) {
         ad.setCategory(category);
         return this;
     }

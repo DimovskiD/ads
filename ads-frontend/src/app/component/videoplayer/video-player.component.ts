@@ -1,10 +1,30 @@
-import { Component, OnInit } from '@angular/core';
-import { AfterViewInit, ViewChild, ElementRef } from '@angular/core';
-import {FileService} from '../../service/file/file.service';
-import {log} from 'util';
+import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/core';
 import {AdService} from '../../service/ad/ad.service';
-import {Ad} from '../../model/ad/ad';
+import {Ad, AdType} from '../../model/ad/ad';
+
 declare let videojs: any;
+
+function showOverlayAd(player: any, imageAd: Ad) {
+  player.overlay({
+    content: 'Default overlay content',
+    debug: true,
+    overlays: [{
+      content: '<img class = "img img-responsive" src ="' + 'http://localhost:8080/files/' + imageAd.fileName + '">',
+      start: 0,
+      end: imageAd.duration,
+      align: 'center'
+    }]});
+}
+
+function showLinearAd(player: any, ad: Ad) {
+  player.ads.startLinearAdMode();
+  // setTimeout(() => {
+  //   player.trigger('adended');
+  // }, this.ad.duration * 1000);
+  // play your linear ad content
+  player.src('http://localhost:8080/files/' + ad.fileName);
+
+}
 
 @Component({
   selector: 'app-videoplayer',
@@ -20,18 +40,20 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit  {
   video = '//vjs.zencdn.net/v/oceans.mp4';
   ad: Ad;
   imgAd: Ad;
+  midrollPlayed = false;
+
   @ViewChild('myvid') vid: ElementRef;
   constructor(adService: AdService) {
     this.adService = adService;
-    adService.findById(41).subscribe(data => {
+    adService.getRandomAdByType(AdType.LINEAR).subscribe(data => {
       this.ad = data;
       console.log(this.ad.fileName);
     });
-
-    adService.findById(42).subscribe(data => {
+    adService.getRandomAdByType(AdType.OVERLAY).subscribe(data => {
       this.imgAd = data;
       console.log(this.ad.fileName);
     });
+
   }
 
   ngOnInit() {
@@ -41,7 +63,6 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit  {
     const options = {
       controls: true,
       autoplay: false,
-      preload: 'auto',
       techOrder: ['html5']
     };
     this.vidObj = new videojs(this.vid.nativeElement, options, () => {
@@ -53,31 +74,40 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit  {
         // fetch ad inventory asynchronously, then ...
         player.trigger('adsready');
         player.log('ad ready!');
+      });
 
+      player.on('timeupdate', () => {
+         if (Math.round(player.currentTime()) > 20 && !this.midrollPlayed) {
+            player.trigger('readyformidroll');
+            this.midrollPlayed = true;
+         }
       });
 
       player.on('readyforpreroll', () => {
-        player.ads.startLinearAdMode();
-        // play your linear ad content
         player.log('ad preroll ready!');
-        player.src('http://localhost:8080/files/' + this.ad.fileName);
-        player.overlay({
-          content: 'Default overlay content',
-          debug: true,
-          overlays: [{
-            content: '<img class = "img img-responsive" src ="' + 'http://localhost:8080/files/' + this.imgAd.fileName + '">',
-            start: 0,
-            end: 10,
-            align: 'bottom'
+        showLinearAd(player, this.ad);
+      });
 
-          }]});
-        // when all your linear ads have finished… do not confuse this with `ended`
-        player.one('adended', () => {
-          player.ads.endLinearAdMode();
-        });
+      player.on('readyformidroll', () => {
+        player.log('ad midroll ready!');
+        showLinearAd(player, this.ad);
+      });
+      player.on('readyforpostroll', () => {
+        player.log('ad postroll ready!');
+        showLinearAd(player, this.ad);
+      });
+      // when all your linear ads have finished… do not confuse this with `ended`
+      player.on('adended', () => {
+        player.ads.endLinearAdMode();
+        this.adService.getRandomAdByType(AdType.LINEAR).subscribe(data => {
+          this.ad = data;
+          console.log(this.ad.fileName);
+        }); // load new ad for next ad showing
+        const img = this.imgAd;
+        showOverlayAd(player, img);
       });
       player.trigger('adsready');
-
+      // player.on('timeupdate')
     });
   }
 
