@@ -4,6 +4,8 @@ import {Ad, AdType} from '../../model/ad/ad';
 
 declare let videojs: any;
 
+// call this function with reference to the videoJs player and ad object to show overlay ad
+// the ad will be shown from the start of the video for as many seconds as specified in the ad.duration field
 function showOverlayAd(player: any, imageAd: Ad) {
   player.overlay({
     content: 'Default overlay content',
@@ -17,8 +19,9 @@ function showOverlayAd(player: any, imageAd: Ad) {
 }
 
 function showLinearAd(player: any, ad: Ad) {
+  if (ad === undefined) {return; }
   player.ads.startLinearAdMode();
-  // setTimeout(() => {
+  // setTimeout(() => { //uncomment this if you want the linear ad to last for as many seconds as specified in ad.duration field
   //   player.trigger('adended');
   // }, this.ad.duration * 1000);
   // play your linear ad content
@@ -36,11 +39,11 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit  {
   adService: AdService;
   title = 'Video player';
   vidObj: any;
-  poster = '//vjs.zencdn.net/v/oceans.png';
-  video = '//vjs.zencdn.net/v/oceans.mp4';
-  ad: Ad;
-  imgAd: Ad;
-  midrollPlayed = false;
+  poster = '//vjs.zencdn.net/v/oceans.png'; // default video value, should be replaced with dynamic link to video
+  video = '//vjs.zencdn.net/v/oceans.mp4';  // default poster size, should be replaced with dynamic link to poster
+  ad: Ad;  // reference to linear ad
+  imgAd: Ad; // reference to overlay ad
+  midrollPlayed = false; // true if midroll ad was played - used to show midroll only once, remove to show it more than once
 
   @ViewChild('myvid') vid: ElementRef;
   constructor(adService: AdService) {
@@ -63,6 +66,7 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit  {
     const options = {
       controls: true,
       autoplay: false,
+      preload: true,
       techOrder: ['html5']
     };
     this.vidObj = new videojs(this.vid.nativeElement, options, () => {
@@ -107,7 +111,6 @@ export class VideoPlayerComponent implements OnInit, AfterViewInit  {
         showOverlayAd(player, img);
       });
       player.trigger('adsready');
-      // player.on('timeupdate')
     });
   }
 

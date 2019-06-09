@@ -1,6 +1,7 @@
 package com.finki.ads.service.impl;
 
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
@@ -117,6 +118,11 @@ public class StorageServiceImpl implements StorageService {
         Path file = load(filename);
         return file.toString();
 
+    }
+
+    @Override
+    public void delete(File file) {
+        file.delete();
     }
 
     @Override

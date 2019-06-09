@@ -1,3 +1,7 @@
+<head>
+  <link href="https://vjs.zencdn.net/7.5.4/video-js.css" rel="stylesheet">
+</head>
+
 <div class="card my-5">
   <div class="card-header">
     Add New Advertisement
@@ -73,7 +77,20 @@
       </div>
       <div [hidden]="!fail" class="alert alert-danger" id="file-error">Invalid file format.</div>
 
-      <button type="submit" [disabled]="!adForm.form.valid || ad.fileName==null" class="btn btn-info">Submit</button>
+      <input type = "button" [hidden]="!existingAd" (click)="showPreview()" class="btn btn-info" style="margin-right: 10px" value="Preview" />
+
+      <button type = 'submit' [disabled]="!adForm.form.valid || ad.fileName==null" class="btn btn-info" >Submit</button>
+
+      <div id="showImage" style="margin-top: 10px" [hidden]="imageHidden">
+        <img [src]="'http://localhost:8080/files/' + ad.fileName" class="img img-responsive">
+      </div>
+
+      <div id="showVideo" [hidden]="videoHidden" style="margin-top: 10px">
+        <video #myvid id="my-video" class="video-js vjs-big-play-centered mini-play"
+               width="640" height="360"  style="margin: auto;">
+        </video>
+      </div>
+
     </form>
   </div>
 </div>

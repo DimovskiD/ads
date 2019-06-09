@@ -9,15 +9,16 @@ import {Ad} from '../../model/ad/ad';
 })
 export class AdComponent implements OnInit {
 
-  ads: Ad[];
+  ads: Ad[]; // list of ads
 
   constructor(private adService: AdService) { }
 
   ngOnInit() {
     this.adService.findAll().subscribe(data => {
-      this.ads = data;
+      this.ads = data; // load ads from api
     });
   }
+  // delete ad from db
   delete(ad: Ad) {
     this.adService.delete(ad.id).subscribe(deleted => {
       console.log(deleted);
