@@ -31,6 +31,15 @@
       </div>
       <div [hidden]="ad.importance > 0" class="alert alert-danger">Importance is required</div>
 
+        <div class="form-group">
+        <label for="duration">When To Show (%)</label>
+        <input type="number" min="0" max="100" onkeypress="return event.charCode >= 48" [(ngModel)]="ad.whenToShow"
+               class="form-control" id="whenToShow" name="whenToShow" placeholder="%"
+               required #whenToShow="ngModel">
+      </div>
+      <div [hidden]="(ad.whenToShow >= 0 && ad.whenToShow <=100)" class="alert alert-danger">This value must be between 0 and 100</div>
+
+
 
 
 

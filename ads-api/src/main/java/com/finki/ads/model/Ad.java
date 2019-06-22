@@ -15,6 +15,7 @@ public class Ad {
     private int duration;
     private boolean active;
     private AdType type;
+    private int whenToShow;
     private String fileName;
     private Category category;
     private int importance;
@@ -25,6 +26,14 @@ public class Ad {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public int getWhenToShow() {
+        return whenToShow;
+    }
+
+    public void setWhenToShow(int whenToShow) {
+        this.whenToShow = whenToShow;
     }
 
     public String getName() {

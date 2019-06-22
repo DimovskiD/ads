@@ -41,6 +41,11 @@ public class AdBuilder {
         return this;
     }
 
+    public AdBuilder setWhenToShow (int when) {
+        ad.setWhenToShow(when);
+        return this;
+    }
+
 
     public AdBuilder setCategory (Category category) {
         ad.setCategory(category);

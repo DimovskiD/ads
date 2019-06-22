@@ -15,5 +15,5 @@ export class Ad {
   fileName: string;
   category: Category;
   importance: number;
-
+  whenToShow: number;
 }

@@ -19,7 +19,7 @@ public interface AdRepositoryImpl extends JpaRepository<Ad,Long>, AdRepository {
 
     @Override
     default Ad update(int id, Ad ad) {
-        updateAd(id, ad.getName(), ad.isActive(), ad.getDuration(), ad.getType(), ad.getFileName(), ad.getCategory(), ad.getImportance());
+        updateAd(id, ad.getName(), ad.isActive(), ad.getDuration(), ad.getType(), ad.getFileName(), ad.getCategory(), ad.getImportance(), ad.getWhenToShow());
         return findAdById(ad.getId());
     }
 
@@ -29,13 +29,14 @@ public interface AdRepositoryImpl extends JpaRepository<Ad,Long>, AdRepository {
     @Modifying(clearAutomatically = true)
     @Transactional
     @Query("update Ad a set a.name=:name, a.active = :active, a.duration =:duration, a.type =:adtype, " +
-            "a.fileName=:fileName, a.category = :category, a.importance = :importance where a.id=:id")
+            "a.fileName=:fileName, a.category = :category, a.importance = :importance, a.whenToShow = :whenToShow where a.id=:id")
     int updateAd(@Param("id") int id, @Param("name") String name,
                  @Param("active") boolean active, @Param("duration") int duration,
                  @Param("adtype") AdType type,
                  @Param("fileName") String fileName,
                  @Param("category") Category category,
-                 @Param("importance") int importance);
+                 @Param("importance") int importance,
+                 @Param("whenToShow") int whenToShow);
 
     @Query("select a from Ad a where a.type = :adType and a.active = true ORDER BY function('RAND')")
     List<Ad> selectRandomAdByType(@Param("adType") AdType adType);

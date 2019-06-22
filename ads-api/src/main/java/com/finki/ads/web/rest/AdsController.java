@@ -59,6 +59,7 @@ public class AdsController {
             .setCategory(ad.getCategory())
             .setDuration(ad.getDuration())
             .setFileName(ad.getFileName())
+            .setWhenToShow(ad.getWhenToShow())
             .setImportance(ad.getImportance())
             .setType(ad.getType())
                 .build();
@@ -84,6 +85,7 @@ public class AdsController {
                 .setDuration(ad.getDuration())
                 .setFileName(ad.getFileName())
                 .setImportance(ad.getImportance())
+                .setWhenToShow(ad.getWhenToShow())
                 .setType(ad.getType())
                 .build();
         adService.updateAd(id,ad);
